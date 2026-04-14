@@ -91,6 +91,25 @@ n8n-nodes-base.webhook
 
 ---
 
+## CRITICAL: Deprecated Node Types
+
+Some node types from older n8n versions are no longer recognized by the current runtime and will cause `Unrecognized node type` errors at execution time. NEVER use these.
+
+**Deprecated → Correct replacement:**
+
+| ❌ Deprecated | ✅ Use instead |
+|---|---|
+| `n8n-nodes-base.start` | `n8n-nodes-base.manualTrigger` |
+| `n8n-nodes-base.function` | `n8n-nodes-base.code` (mode: `runOnceForEachItem` or `runOnceForAllItems`) |
+| `n8n-nodes-base.functionItem` | `n8n-nodes-base.code` (mode: `runOnceForEachItem`) |
+| `n8n-nodes-base.interval` | `n8n-nodes-base.scheduleTrigger` |
+
+**Rule:** when in doubt about a node type, call `search_nodes` or `get_node` BEFORE adding it to a workflow. Do not rely on memory — n8n node registry evolves and old names get dropped.
+
+For manual-run workflows, always use `n8n-nodes-base.manualTrigger` as the trigger. For HTTP calls use `n8n-nodes-base.httpRequest` (typeVersion 4.2 or higher). Verify typeVersion with `get_node` if unsure.
+
+---
+
 ## Workflow Building Process
 
 ### Phase 1: Understand

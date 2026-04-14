@@ -79,6 +79,27 @@ n8n-nodes-base.httpRequest
 
 ---
 
+## CRITICAL: Deprecated Node Types
+
+Some node types from older n8n versions are no longer recognized by the current runtime and will trigger `Unrecognized node type` errors at execution. NEVER use these.
+
+**Deprecated → Correct replacement:**
+
+| ❌ Deprecated | ✅ Use instead |
+|---|---|
+| `n8n-nodes-base.start` | `n8n-nodes-base.manualTrigger` |
+| `n8n-nodes-base.function` | `n8n-nodes-base.code` (mode: `runOnceForEachItem` or `runOnceForAllItems`) |
+| `n8n-nodes-base.functionItem` | `n8n-nodes-base.code` (mode: `runOnceForEachItem`) |
+| `n8n-nodes-base.interval` | `n8n-nodes-base.scheduleTrigger` |
+
+**Rule:** when in doubt about a node type, call `search_nodes` or `get_node` BEFORE adding it to a workflow. Do not rely on memory — the n8n node registry evolves and old names get dropped.
+
+For manual-run workflows, always use `n8n-nodes-base.manualTrigger` as the trigger. For HTTP calls use `n8n-nodes-base.httpRequest` (typeVersion 4.2 or higher). Verify typeVersion with `get_node` if unsure.
+
+Also: after `n8n_create_workflow` or `n8n_update_partial_workflow`, ALWAYS run `n8n_validate_workflow` with profile `runtime` before declaring the workflow done. If validation reports unknown/deprecated types, fix them and re-validate — do not return the link to the user until validation passes.
+
+---
+
 ## Workflow Building Process
 
 ### Phase 1: Understand
