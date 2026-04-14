@@ -1,0 +1,18 @@
+# Secrets e configurazione locale
+.env
+.env.local
+librechat.yaml
+*.bak
+
+# Docker volumes locali (se spostati qui)
+data/
+volumes/
+
+# macOS
+.DS_Store
+
+# Editor
+.vscode/
+.idea/
+*.swp
+*~

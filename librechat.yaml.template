@@ -1,0 +1,65 @@
+# ============================================================
+# LibreChat Configuration — n8n Workflow Builder
+# ============================================================
+# NON modificare questo file — usa setup.sh per generare librechat.yaml
+# Docs: https://www.librechat.ai/docs/configuration/librechat_yaml
+# ============================================================
+
+version: 1.2.1
+
+cache: true
+
+# ============================================================
+# Endpoints — Gemini
+# ============================================================
+endpoints:
+  google:
+    models:
+      # fetch: true — carica la lista modelli direttamente da Google
+      # così non serve aggiornare questo file quando escono versioni nuove
+      fetch: true
+    titleModel: "gemini-2.0-flash"
+
+# ============================================================
+# MCP Servers — n8n-mcp
+# ============================================================
+mcpServers:
+  n8n-mcp:
+    type: stdio
+    command: npx
+    args:
+      - "-y"
+      - "n8n-mcp"
+    timeout: 60000
+    initTimeout: 30000
+    env:
+      N8N_API_URL: "__N8N_HOST_URL__"
+      N8N_API_KEY: "__N8N_API_KEY__"
+      MCP_MODE: "stdio"
+      LOG_LEVEL: "error"
+      DISABLE_CONSOLE_OUTPUT: "true"
+    stderr: inherit
+
+# ============================================================
+# MCP Settings
+# ============================================================
+mcpSettings:
+  allowedDomains:
+    - "host.docker.internal"
+    - "localhost"
+
+# ============================================================
+# Interface
+# ============================================================
+interface:
+  endpointsMenu: true
+  modelSelect: true
+  parameters: true
+  presets: true
+
+# ============================================================
+# Registration & Login
+# ============================================================
+registration:
+  socialLogins: []
+  allowedDomains: []

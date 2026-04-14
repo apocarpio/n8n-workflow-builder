@@ -1,0 +1,76 @@
+services:
+  # ============================================================
+  # LibreChat — Web UI (porta 3080)
+  # ============================================================
+  librechat:
+    image: ghcr.io/danny-avila/librechat:latest
+    container_name: n8n-workflow-builder
+    ports:
+      - "${LIBRECHAT_PORT:-3080}:3080"
+    depends_on:
+      - mongodb
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      - MONGO_URI=${MONGO_URI:-mongodb://mongodb:27017/LibreChat}
+      - MEILI_HOST=${MEILI_HOST:-http://meilisearch:7700}
+      - MEILI_MASTER_KEY=${MEILI_MASTER_KEY:-changeme-meili-key}
+    volumes:
+      - ./librechat.yaml:/app/librechat.yaml:ro
+      - ./prompts:/app/client/public/prompts:ro
+      - librechat_images:/app/client/public/images
+      - librechat_logs:/app/api/logs
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+  # ============================================================
+  # MongoDB — Storage LibreChat
+  # ============================================================
+  mongodb:
+    image: mongo:7
+    container_name: n8n-builder-mongodb
+    restart: unless-stopped
+    volumes:
+      - mongodb_data:/data/db
+
+  # ============================================================
+  # Meilisearch — Ricerca chat
+  # ============================================================
+  meilisearch:
+    image: getmeili/meilisearch:v1.7
+    container_name: n8n-builder-meilisearch
+    restart: unless-stopped
+    environment:
+      - MEILI_MASTER_KEY=${MEILI_MASTER_KEY:-changeme-meili-key}
+    volumes:
+      - meilisearch_data:/meili_data
+
+  # ============================================================
+  # n8n — incluso solo se attivato dal profilo "with-n8n"
+  # ============================================================
+  # Si attiva con: docker compose --profile with-n8n up -d
+  # setup.sh lo fa automaticamente se non rileva n8n esistente
+  n8n:
+    image: docker.n8n.io/n8nio/n8n:latest
+    container_name: n8n-builder-n8n
+    profiles:
+      - with-n8n
+    ports:
+      - "${N8N_PORT:-5678}:5678"
+    restart: unless-stopped
+    environment:
+      - N8N_HOST=0.0.0.0
+      - N8N_PORT=5678
+      - N8N_PROTOCOL=http
+      - N8N_SECURE_COOKIE=false
+      - GENERIC_TIMEZONE=${GENERIC_TIMEZONE:-Europe/Paris}
+    volumes:
+      - n8n_data:/home/node/.n8n
+
+volumes:
+  mongodb_data:
+  meilisearch_data:
+  librechat_images:
+  librechat_logs:
+  n8n_data:
