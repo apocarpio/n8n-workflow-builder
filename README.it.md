@@ -34,8 +34,29 @@ Sotto il cofano: Google Gemini (free tier) + [n8n-mcp](https://github.com/czlonk
 
 - macOS (testato) o Linux
 - [Docker Desktop](https://www.docker.com/products/docker-desktop/) installato e attivo
-- Una [Google Gemini API Key](https://aistudio.google.com/apikey) — gratis con account Google
+- Una **Google Gemini API Key** — gratis con account Google
 - n8n — se non ce l'hai, l'installer te lo aggiunge nello stack
+
+### Come ottenere le API key
+
+**Gemini API Key:**
+
+1. Vai su [Google AI Studio](https://aistudio.google.com/apikey)
+2. Accedi con il tuo account Google
+3. Clicca **"Create API key"**
+4. Copia la chiave (inizia con `AIza...`)
+
+Non serve billing — il free tier è sufficiente per usare questo progetto.
+
+**n8n API Key:**
+
+1. Apri la tua istanza n8n su `http://localhost:5678`
+2. Vai in **Settings** (icona ingranaggio, in basso a sinistra)
+3. Clicca **API** nel menu a sinistra
+4. Clicca **"Create an API key"**
+5. Dai un nome (es. `workflow-builder`) e copia la chiave
+
+Se non hai ancora n8n, l'installer ne avvia uno per te — crea la API key dopo e rilancia `./setup.sh`.
 
 ## Installazione
 
@@ -72,8 +93,8 @@ Per risultati migliori, incolla il contenuto di `prompts/n8n-builder-system-prom
 
 Ci sono due versioni:
 
-- `n8n-builder-system-prompt.md` — 693 righe, ~85% di copertura
-- `n8n-builder-system-prompt-extended.md` — 966 righe, ~95% di copertura
+- `n8n-builder-system-prompt.md` — versione standard, ~85% di copertura
+- `n8n-builder-system-prompt-extended.md` — versione estesa, ~95% di copertura (consigliata)
 
 ## Comandi utili
 
